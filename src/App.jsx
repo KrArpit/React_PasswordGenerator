@@ -18,7 +18,7 @@ function App() {
     if(number) str += "0123456789";
     if(specialChar) str += "!#$%&()*+-/<=>?@[]^_{|}~";
 
-    for (let i = 0; i < length; i++) {
+    for (let i = 1; i <= length; i++) {
       let char = Math.floor(Math.random() * str.length +1);
       pass += str.charAt(char);
     }
@@ -26,14 +26,15 @@ function App() {
   },[number, specialChar, length, setPassword])
 
   // function called, when you click on copy text
-  function copyText(){
-    window,navigator.clipboard.writeText(password);
+  async function copyText(){
     if(password){
-      passwordRef.current.select();
+     await navigator.clipboard.writeText(password).then(()=>{
+        passwordRef.current.select();
       setCopy("Copied");
-    setTimeout(()=>{
+      setTimeout(()=>{
       setCopy("Copy");
     },1000);
+      })
     }
   }
   // useEffect hook
@@ -42,20 +43,20 @@ function App() {
   }, [number,specialChar,length, passwordGenerator]);
 
   return (
-    <div className=' w-full h-screen flex items-center justify-center bg-[#0E0D12]'>
-      <div className='w-2/5'>
+    <div className=' w-full h-screen bg-[#0E0D12] flex'>
+      <div className='w-full max-w-lg mx-auto mt-40'>
       <h2 className='font-bold text-stone-400 text-center mb-2'>Password Generator</h2>
-      <div className='bg-[#23222B] flex justify-between items-center rounded-lg mb-3'>
+      <div className='flex justify-between items-center overflow-hidden rounded-lg mb-3 gap-1 bg-[#23222B]'>
         <input
         value={password}
         ref={passwordRef}
-        className='bg-transparent px-3 py-4 outline-none text-3xl basis-full font-semibold text-slate-200 cursor-default'
+        className='bg-transparent px-3 py-4 outline-none text-3xl font-semibold text-slate-200 cursor-default overflow-hidden w-4/5 '
         type="text" 
         placeholder='Pa$5W0rD!' 
         readOnly />
-        <span 
+        <button 
         onClick={copyText}
-        className='px-4 py-4 text-xl text-[#A3FFAE] font-medium cursor-pointer'>{copy}</span>
+        className='px-3 py-2 sm:px-4 sm:py-4 text-xl text-[#A3FFAE] font-medium cursor-pointer  right-2'>{copy}</button>
         </div>
         {/* 2nd Section */}
         <div className='bg-[#23222B] rounded-lg p-5 relative'>
